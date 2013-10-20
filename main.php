@@ -29,13 +29,13 @@ include("include/session.php");
  */
 if($session->logged_in){
    echo "<h1>Logged In</h1>";
-   echo "Welcome <b>$session->username</b>, you are logged in. <br><br>"
-       ."[<a href=\"userinfo.php?user=$session->username\">My Account</a>] &nbsp;&nbsp;"
-       ."[<a href=\"useredit.php\">Edit Account</a>] &nbsp;&nbsp;";
+   echo "Welcome <b><a href=\"userinfo.php?user=$session->username\">$session->username</a></b>, you are logged in. / [<a href=\"process.php\">Logout</a>]<br><br>"
+       ."[<a href=\"userinfo.php?user=$session->username\">View My Profile</a>] &nbsp;&nbsp;"
+       ."[<a href=\"useredit.php\">Edit Profile</a>] &nbsp;&nbsp;";
    if($session->isAdmin()){
       echo "[<a href=\"admin/admin.php\">Admin Center</a>] &nbsp;&nbsp;";
    }
-   echo "[<a href=\"process.php\">Logout</a>]";
+   echo "";
 }
 else{
 ?>

@@ -257,6 +257,38 @@ Username:<br>
 </form>
 </td>
 </tr>
+
+<td><hr></td>
+
+<tr>
+<td>
+<?
+/**
+ * Add  User
+ */
+?>
+<h3>Add user</h3>
+
+<form action="adminprocess.php" method="POST">
+<table align="left" border="0" cellspacing="0" cellpadding="3">
+<tr><td>Username:</td><td><input type="text" name="user" maxlength="30" value="<? echo $form->value("user"); ?>"></td><td><? echo $form->error("user"); ?></td></tr>
+<tr><td>Password:</td><td><input type="password" name="pass" maxlength="30" value="<? echo $form->value("pass"); ?>"></td><td><? echo $form->error("pass"); ?></td></tr>
+<tr><td>Email:</td><td><input type="text" name="email" maxlength="50" value="<? echo $form->value("email"); ?>"></td><td><? echo $form->error("email"); ?></td></tr>
+<tr><td colspan="2" align="right">
+<input type="hidden" name="adduser" value="1">
+<input type="submit" value="Add!"></td></tr>
+</table>
+</form>
+</td>
+</tr>
+<tr><td colspan="2" align="left"><a href="main.php">Back to Main</a></td></tr>
+<?
+if($form->num_errors > 0){
+   echo "<td><font size=\"2\" color=\"#ff0000\">".$form->num_errors." error(s) found</font></td>";
+}
+?>
+
+
 </table>
 </body>
 </html>

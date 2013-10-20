@@ -41,6 +41,10 @@ class AdminProcess
       else if(isset($_POST['subdelbanned'])){
          $this->procDeleteBannedUser();
       }
+      /* User submitted registration form */
+      else if(isset($_POST['adduser'])){
+         $this->procAdduser();
+      }
       /* Should not get here, redirect to home page */
       else{
          header("Location: ../main.php");
@@ -70,6 +74,46 @@ class AdminProcess
       }
    }
    
+
+   /**
+    * procRegister - Processes the user submitted registration form,
+    * if errors are found, the user is redirected to correct the
+    * information, if not, the user is effectively registered with
+    * the system and an email is (optionally) sent to the newly
+    * created user.
+    */
+   function procAdduser(){
+      global $session, $form;
+      /* Convert username to all lowercase (by option) */
+      if(ALL_LOWERCASE){
+         $_POST['user'] = strtolower($_POST['user']);
+      }
+      /* Registration attempt */
+      $retval = $session->register($_POST['user'], $_POST['pass'], $_POST['email']);
+      
+      /* Registration Successful */
+      if($retval == 0){
+         $_SESSION['reguname'] = $_POST['user'];
+         $_SESSION['regsuccess'] = true;
+         header("Location: ".$session->referrer);
+      }
+      /* Error found with form */
+      else if($retval == 1){
+         $_SESSION['value_array'] = $_POST;
+         $_SESSION['error_array'] = $form->getErrorArray();
+         header("Location: ".$session->referrer);
+      }
+      /* Registration attempt failed */
+      else if($retval == 2){
+         $_SESSION['reguname'] = $_POST['user'];
+         $_SESSION['regsuccess'] = false;
+         header("Location: ".$session->referrer);
+      }
+   }
+
+
+
+
    /**
     * procDeleteUser - If the submitted username is correct,
     * the user is deleted from the database.
