@@ -69,7 +69,8 @@ if($session->logged_in){
 
 		/* Link back to main */
 		echo "<br>Back To [<a href=\"main.php\">Main</a>]<br>";
-	}else{
+	}
+	else{
 		   echo "You don't have permission to view this page!";
 	}
 }
