@@ -22,14 +22,14 @@ if($session->logged_in){
 		
 	// $req_user = trim($_GET['user']);
 	// If user is admin, let him view this page (user info)
-	if($session->isAdmin() or  $session->username == trim($_GET['user'])){
+	if($session->isAdmin() || ($session->username == trim($_GET['user']))){
 
 		/* Requested Username error checking */
 		$req_user = trim($_GET['user']);
 		if(!$req_user || strlen($req_user) == 0 ||
 		   !eregi("^([0-9a-z])+$", $req_user) ||
 		   !$database->usernameTaken($req_user)){
-		   die("Username not registered");
+		   die("Username not registered or specified!");
 		}
 
 		/* Logged in user viewing own account */
@@ -63,8 +63,9 @@ if($session->logged_in){
 		 */
 
 		/* If logged in user viewing own account, give link to edit */
-		if(strcmp($session->username,$req_user) == 0){
-		   echo "<br><a href=\"useredit.php\">Edit Account Information</a><br>";
+		// if(strcmp($session->username,$req_user) == 0){
+		if ($session->isAdmin() || ($session->username == trim($_GET['user']))){
+		   echo "<br><a href=\"useredit.php?user=$req_user\">Edit Account Information</a><br>";
 		}
 
 		/* Link back to main */

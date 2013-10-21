@@ -336,7 +336,7 @@ class Session
     * format, the change is made. All other fields are changed
     * automatically.
     */
-   function editAccount($subcurpass, $subnewpass, $subemail){
+   function editAccount($getuser, $subcurpass, $subnewpass, $subemail){
       global $database, $form;  //The database and form object
       /* New password entered */
       if($subnewpass){
@@ -353,7 +353,7 @@ class Session
                $form->setError($field, "* Current Password incorrect");
             }
             /* Password entered is incorrect */
-            if($database->confirmUserPass($this->username,md5($subcurpass)) != 0){
+            if($database->confirmUserPass($getuser,md5($subcurpass)) != 0){
                $form->setError($field, "* Current Password incorrect");
             }
          }
@@ -397,12 +397,12 @@ class Session
       
       /* Update password since there were no errors */
       if($subcurpass && $subnewpass){
-         $database->updateUserField($this->username,"password",md5($subnewpass));
+         $database->updateUserField($getuser,"password",md5($subnewpass));
       }
       
       /* Change Email */
       if($subemail){
-         $database->updateUserField($this->username,"email",$subemail);
+         $database->updateUserField($getuser,"email",$subemail);
       }
       
       /* Success! */

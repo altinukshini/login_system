@@ -12,7 +12,7 @@ include("constants.php");
       
 class MySQLDB
 {
-   var $connection;         //The MySQL database connection
+   var $db_connection;         //The MySQL database db_connection
    var $num_active_users;   //Number of active users viewing site
    var $num_active_guests;  //Number of active guests viewing site
    var $num_members;        //Number of signed-up users
@@ -20,9 +20,9 @@ class MySQLDB
 
    /* Class constructor */
    function MySQLDB(){
-      /* Make connection to database */
-      $this->connection = mysql_connect(DB_SERVER, DB_USER, DB_PASS) or die(mysql_error());
-      mysql_select_db(DB_NAME, $this->connection) or die(mysql_error());
+      /* Make db_connection to database */
+      $this->db_connection = mysql_connect(DB_SERVER, DB_USER, DB_PASS) or die(mysql_error());
+      mysql_select_db(DB_NAME, $this->db_connection) or die(mysql_error());
       
       /**
        * Only query database to find out number of members
@@ -56,7 +56,7 @@ class MySQLDB
 
       /* Verify that user is in database */
       $q = "SELECT password FROM ".TBL_USERS." WHERE username = '$username'";
-      $result = mysql_query($q, $this->connection);
+      $result = mysql_query($q, $this->db_connection);
       if(!$result || (mysql_numrows($result) < 1)){
          return 1; //Indicates username failure
       }
@@ -91,7 +91,7 @@ class MySQLDB
 
       /* Verify that user is in database */
       $q = "SELECT userid FROM ".TBL_USERS." WHERE username = '$username'";
-      $result = mysql_query($q, $this->connection);
+      $result = mysql_query($q, $this->db_connection);
       if(!$result || (mysql_numrows($result) < 1)){
          return 1; //Indicates username failure
       }
@@ -119,7 +119,7 @@ class MySQLDB
          $username = addslashes($username);
       }
       $q = "SELECT username FROM ".TBL_USERS." WHERE username = '$username'";
-      $result = mysql_query($q, $this->connection);
+      $result = mysql_query($q, $this->db_connection);
       return (mysql_numrows($result) > 0);
    }
    
@@ -132,7 +132,7 @@ class MySQLDB
          $username = addslashes($username);
       }
       $q = "SELECT username FROM ".TBL_BANNED_USERS." WHERE username = '$username'";
-      $result = mysql_query($q, $this->connection);
+      $result = mysql_query($q, $this->db_connection);
       return (mysql_numrows($result) > 0);
    }
    
@@ -150,7 +150,7 @@ class MySQLDB
          $ulevel = USER_LEVEL;
       }
       $q = "INSERT INTO ".TBL_USERS." VALUES ('$username', '$password', '0', $ulevel, '$email', $time)";
-      return mysql_query($q, $this->connection);
+      return mysql_query($q, $this->db_connection);
    }
    
    /**
@@ -159,7 +159,7 @@ class MySQLDB
     */
    function updateUserField($username, $field, $value){
       $q = "UPDATE ".TBL_USERS." SET ".$field." = '$value' WHERE username = '$username'";
-      return mysql_query($q, $this->connection);
+      return mysql_query($q, $this->db_connection);
    }
    
    /**
@@ -169,7 +169,7 @@ class MySQLDB
     */
    function getUserInfo($username){
       $q = "SELECT * FROM ".TBL_USERS." WHERE username = '$username'";
-      $result = mysql_query($q, $this->connection);
+      $result = mysql_query($q, $this->db_connection);
       /* Error occurred, return given name by default */
       if(!$result || (mysql_numrows($result) < 1)){
          return NULL;
@@ -190,7 +190,7 @@ class MySQLDB
    function getNumMembers(){
       if($this->num_members < 0){
          $q = "SELECT * FROM ".TBL_USERS;
-         $result = mysql_query($q, $this->connection);
+         $result = mysql_query($q, $this->db_connection);
          $this->num_members = mysql_numrows($result);
       }
       return $this->num_members;
@@ -203,7 +203,7 @@ class MySQLDB
    function calcNumActiveUsers(){
       /* Calculate number of users at site */
       $q = "SELECT * FROM ".TBL_ACTIVE_USERS;
-      $result = mysql_query($q, $this->connection);
+      $result = mysql_query($q, $this->db_connection);
       $this->num_active_users = mysql_numrows($result);
    }
    
@@ -214,7 +214,7 @@ class MySQLDB
    function calcNumActiveGuests(){
       /* Calculate number of guests at site */
       $q = "SELECT * FROM ".TBL_ACTIVE_GUESTS;
-      $result = mysql_query($q, $this->connection);
+      $result = mysql_query($q, $this->db_connection);
       $this->num_active_guests = mysql_numrows($result);
    }
    
@@ -225,11 +225,11 @@ class MySQLDB
     */
    function addActiveUser($username, $time){
       $q = "UPDATE ".TBL_USERS." SET timestamp = '$time' WHERE username = '$username'";
-      mysql_query($q, $this->connection);
+      mysql_query($q, $this->db_connection);
       
       if(!TRACK_VISITORS) return;
       $q = "REPLACE INTO ".TBL_ACTIVE_USERS." VALUES ('$username', '$time')";
-      mysql_query($q, $this->connection);
+      mysql_query($q, $this->db_connection);
       $this->calcNumActiveUsers();
    }
    
@@ -237,7 +237,7 @@ class MySQLDB
    function addActiveGuest($ip, $time){
       if(!TRACK_VISITORS) return;
       $q = "REPLACE INTO ".TBL_ACTIVE_GUESTS." VALUES ('$ip', '$time')";
-      mysql_query($q, $this->connection);
+      mysql_query($q, $this->db_connection);
       $this->calcNumActiveGuests();
    }
    
@@ -247,7 +247,7 @@ class MySQLDB
    function removeActiveUser($username){
       if(!TRACK_VISITORS) return;
       $q = "DELETE FROM ".TBL_ACTIVE_USERS." WHERE username = '$username'";
-      mysql_query($q, $this->connection);
+      mysql_query($q, $this->db_connection);
       $this->calcNumActiveUsers();
    }
    
@@ -255,7 +255,7 @@ class MySQLDB
    function removeActiveGuest($ip){
       if(!TRACK_VISITORS) return;
       $q = "DELETE FROM ".TBL_ACTIVE_GUESTS." WHERE ip = '$ip'";
-      mysql_query($q, $this->connection);
+      mysql_query($q, $this->db_connection);
       $this->calcNumActiveGuests();
    }
    
@@ -264,7 +264,7 @@ class MySQLDB
       if(!TRACK_VISITORS) return;
       $timeout = time()-USER_TIMEOUT*60;
       $q = "DELETE FROM ".TBL_ACTIVE_USERS." WHERE timestamp < $timeout";
-      mysql_query($q, $this->connection);
+      mysql_query($q, $this->db_connection);
       $this->calcNumActiveUsers();
    }
 
@@ -273,7 +273,7 @@ class MySQLDB
       if(!TRACK_VISITORS) return;
       $timeout = time()-GUEST_TIMEOUT*60;
       $q = "DELETE FROM ".TBL_ACTIVE_GUESTS." WHERE timestamp < $timeout";
-      mysql_query($q, $this->connection);
+      mysql_query($q, $this->db_connection);
       $this->calcNumActiveGuests();
    }
    
@@ -283,11 +283,11 @@ class MySQLDB
     * resource identifier.
     */
    function query($query){
-      return mysql_query($query, $this->connection);
+      return mysql_query($query, $this->db_connection);
    }
 };
 
-/* Create database connection */
+/* Create database db_connection */
 $database = new MySQLDB;
 
 ?>

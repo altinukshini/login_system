@@ -176,20 +176,33 @@ class Process
     * before a change is made.
     */
    function procEditAccount(){
-      global $session, $form;
+      global $database, $session, $form;
+
+       /* Requested Username error checking */
+       $req_user = trim($_GET['user']);
+       if(!$req_user || strlen($req_user) == 0 ||
+          !eregi("^([0-9a-z])+$", $req_user) ||
+          !$database->usernameTaken($req_user)){
+          die("Username not specified!");
+      }
+
       /* Account edit attempt */
-      $retval = $session->editAccount($_POST['curpass'], $_POST['newpass'], $_POST['email']);
+      $retval = $session->editAccount($req_user, $_POST['curpass'], $_POST['newpass'], $_POST['email']);
 
       /* Account edit successful */
       if($retval){
          $_SESSION['useredit'] = true;
-         header("Location: ".$session->referrer);
+         // header("Location: ".$session->referrer);
+         header("Location: ".$session->referrer."?user=".$req_user);
+         // echo "Good";
       }
       /* Error found with form */
       else{
          $_SESSION['value_array'] = $_POST;
          $_SESSION['error_array'] = $form->getErrorArray();
-         header("Location: ".$session->referrer);
+         // header("Location: ".$session->referrer);
+         header("Location: ".$session->referrer."?user=".$req_user);
+         // echo "Bad";
       }
    }
 };
