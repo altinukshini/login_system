@@ -26,14 +26,14 @@ if($session->logged_in){
 
 		/* Requested Username error checking */
 		$req_user = trim($_GET['user']);
-		if(!$req_user || strlen($req_user) == 0 ||
-		   !eregi("^([0-9a-z])+$", $req_user) ||
-		   !$database->usernameTaken($req_user)){
+		if(!$function->getUser() || strlen($function->getUser()) == 0 ||
+		   !eregi("^([0-9a-z])+$", $function->getUser()) ||
+		   !$database->usernameTaken($function->getUser())){
 		   die("Username not registered or specified!");
 		}
 
 		/* Logged in user viewing own account */
-		if(strcmp($session->username,$req_user) == 0){
+		if(strcmp($session->username,$function->getUser()) == 0){
 		   echo "<h1>My Account</h1>";
 		}
 		/* Visitor not viewing own account */
@@ -42,10 +42,15 @@ if($session->logged_in){
 		}
 
 		/* Display requested user information */
-		$req_user_info = $database->getUserInfo($req_user);
+		$req_user_info = $database->getUserInfo($function->getUser());
 
-		/* Username */
-		echo "<b>Username: ".$req_user_info['username']."</b><br>";
+		echo "<img src='".$function->getUserPic($function->getUser())."' alt='profile picture' width='150' class='doubleborder'/><br /><br />";
+		
+		/* Name */
+		echo "<b>".$req_user_info['firstname']." ". $req_user_info['lastname']."</b><br><br>";
+
+		// Username
+		echo "<b>Username: </b>".$req_user_info['username']."<br>";
 
 		/* Email */
 		echo "<b>Email:</b> ".$req_user_info['email']."<br>";
@@ -64,7 +69,7 @@ if($session->logged_in){
 
 		/* If logged in user viewing own account, give link to edit */
 		// if(strcmp($session->username,$req_user) == 0){
-		if ($session->isAdmin() || ($session->username == trim($_GET['user']))){
+		if ($session->isAdmin() || ($session->username == $function->getUser())){
 		   echo "<br><a href=\"useredit.php?user=$req_user\">Edit Account Information</a><br>";
 		}
 

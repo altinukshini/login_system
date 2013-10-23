@@ -12,6 +12,9 @@
  */
 include("include/session.php");
 
+ini_set('display_errors',1); 
+ error_reporting(E_ALL);
+
 class Process
 {
    /* Class constructor */
@@ -32,6 +35,10 @@ class Process
       /* User submitted edit account form */
       else if(isset($_POST['subedit'])){
          $this->procEditAccount();
+      }
+      /* User submitted edit account form */
+      else if(isset($_POST['pupload'])){
+         $this->procChangePic();
       }
       /**
        * The only other reason user should be directed here
@@ -176,24 +183,24 @@ class Process
     * before a change is made.
     */
    function procEditAccount(){
-      global $database, $session, $form;
+      global $database, $session, $form, $function;
 
        /* Requested Username error checking */
-       $req_user = trim($_GET['user']);
-       if(!$req_user || strlen($req_user) == 0 ||
-          !eregi("^([0-9a-z])+$", $req_user) ||
-          !$database->usernameTaken($req_user)){
+       // $req_user = trim($_GET['user']);
+       if(!$function->getUser() || strlen($function->getUser()) == 0 ||
+          !eregi("^([0-9a-z])+$", $function->getUser()) ||
+          !$database->usernameTaken($function->getUser())){
           die("Username not specified!");
       }
 
       /* Account edit attempt */
-      $retval = $session->editAccount($req_user, $_POST['curpass'], $_POST['newpass'], $_POST['email']);
+      $retval = $session->editAccount($function->getUser(), $_POST['curpass'], $_POST['newpass'], $_POST['email']);
 
       /* Account edit successful */
       if($retval){
          $_SESSION['useredit'] = true;
          // header("Location: ".$session->referrer);
-         header("Location: ".$session->referrer."?user=".$req_user);
+         header("Location: ".$session->referrer."?user=".$function->getUser());
          // echo "Good";
       }
       /* Error found with form */
@@ -201,10 +208,89 @@ class Process
          $_SESSION['value_array'] = $_POST;
          $_SESSION['error_array'] = $form->getErrorArray();
          // header("Location: ".$session->referrer);
-         header("Location: ".$session->referrer."?user=".$req_user);
+         header("Location: ".$session->referrer."?user=".$function->getUser());
          // echo "Bad";
       }
    }
+
+   /**
+    *  Edit User Profile Picture
+    */
+   function procChangePic(){
+      global $database, $session, $function, $form;
+
+      $get_user = $function->getUser();
+
+       /* Requested Username error checking */
+       if(!$get_user || strlen($get_user) == 0 ||
+          !eregi("^([0-9a-z])+$", $get_user) ||
+          !$database->usernameTaken($get_user)){
+          die("Username not specified!");
+      }
+    
+      $random = rand(000000000, 999999999);
+
+      $filetype = $_FILES["file"]["type"];
+      $filename = $_FILES["file"]["name"];
+      $filesize = $_FILES["file"]["size"];
+      $fileerror = $_FILES["file"]["error"];
+      $tmp_file = $_FILES["file"]["tmp_name"];
+
+      $allowedExts = array("jpg", "jpeg", "gif", "png", "JPG", "JPEG", "PNG");
+      $allowedType = array("image/gif", "image/jpeg", "image/png", "image/jpg");
+      $ext = @end(explode(".", $filename));
+
+      $new_filename = $random."_".$get_user.".".$ext;
+      $target = "uploads/images/profilepic/".$new_filename;
+
+      $field = "file";
+
+      if (!$filename) {
+          $form->setError($field, "* Please select a file to upload!");
+      }else{
+
+        if (in_array($filetype, $allowedType) && in_array($ext, $allowedExts)){
+
+          if ($filesize < 4194304) {
+
+                if ( $fileerror > 0){
+                  $form->setError($field, "* Return Code: ". $fileerror);
+                }
+                else{
+
+                    if (move_uploaded_file($tmp_file,  $target)) {
+                      /* Account edit attempt */
+                      $retval = $session->editUserProfilePic($get_user, $new_filename);
+                      /* Account edit successful */
+                      if($retval){
+                         $_SESSION['useredit'] = true;
+                         header("Location: ".$session->referrer."?user=".$get_user);
+                      }else{
+                        $form->setError($field, "* Error saving filename to database!");
+                      }
+
+                    }else{
+                     $form->setError($field, "* Error moving file to target path on the server, please check the folder permissions!");
+                    }
+                }
+          }else{
+            $form->setError($field, "* File too big! (Allowed size: 4MB)");
+          }
+
+        }
+        else{
+          $form->setError($field, "* File type / Extension not allowed!");
+        }
+
+      }
+      /* Errors exist, have user correct them */
+      if($form->num_errors > 0){
+         $_SESSION['value_array'] = $_POST;
+         $_SESSION['error_array'] = $form->getErrorArray();
+         header("Location: ".$session->referrer."?user=".$get_user);
+      }
+   }
+
 };
 
 /* Initialize process */

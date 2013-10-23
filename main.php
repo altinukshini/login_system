@@ -11,6 +11,8 @@
  * Written by: Jpmaster77 a.k.a. The Grandmaster of C++ (GMC)
  * Last Updated: August 26, 2004
  */
+ini_set('display_errors',1); 
+ error_reporting(E_ALL);
 include("include/session.php");
 ?>
 
@@ -28,6 +30,7 @@ include("include/session.php");
  * a link to the admin center if the user is an administrator.
  */
 if($session->logged_in){
+
    echo "<h1>Logged In</h1>";
    echo "Howdy <b><a href=\"userinfo.php?user=$session->username\">$session->username</a></b>, you are logged in. / [<a href=\"process.php\">Logout</a>]<br><br>"
        ."[<a href=\"userinfo.php?user=$session->username\">View My Profile</a>] &nbsp;&nbsp;"

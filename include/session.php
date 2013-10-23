@@ -11,6 +11,7 @@
 include("database.php");
 include("mailer.php");
 include("form.php");
+include("functions.php");
 
 class Session
 {
@@ -301,6 +302,10 @@ class Session
       if(!$subemail || strlen($subemail = trim($subemail)) == 0){
          $form->setError($field, "* Email not entered");
       }
+      /* Check if email is already in use */
+      else if($database->emailInUse($subemail)){
+            $form->setError($field, "* Email already in use");
+      }
       else{
          /* Check if valid email address */
          $regex = "^[_+a-z0-9-]+(\.[_+a-z0-9-]+)*"
@@ -388,6 +393,9 @@ class Session
             $form->setError($field, "* Email invalid");
          }
          $subemail = stripslashes($subemail);
+      }      /* Check if email is already in use */
+      else if($database->emailInUse($subemail)){
+            $form->setError($field, "* Email already in use");
       }
       
       /* Errors exist, have user correct them */
@@ -408,7 +416,23 @@ class Session
       /* Success! */
       return true;
    }
-   
+
+   // Edit users profile picture
+   function editUserProfilePic($getuser, $userpic){
+      global $database, $form;  //The database and form object
+ 
+      /* Update profile picture */
+      if($database->updateUserField($getuser,"userpic",$userpic)){
+         return true;
+      }else{
+        $field = "pupload";
+        return false;
+      }
+
+      /* Success! */
+      // return true;
+   }
+
    /**
     * isAdmin - Returns true if currently logged in user is
     * an administrator, false otherwise.

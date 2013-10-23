@@ -27,93 +27,97 @@ include("include/session.php");
  */
 if($session->logged_in){
 
-	/* Requested Username error checking */
-	$req_user = trim($_GET['user']);
+	$get_user = $function->getUser();
 
-	/**
-	 * User has submitted form without errors and user's
-	 * account has been edited successfully.
-	 */
-	if(isset($_SESSION['useredit'])){
-
-	   unset($_SESSION['useredit']);
-	   
-	   echo "<h1>User Account Edit Success!</h1>";
-	   echo "<p><b>$req_user</b>, your account has been successfully updated. "
-	       ."<br />See your <a href=\"userinfo.php?user=$req_user\">profile page</a>.</p>";
+	if(!$get_user || strlen($get_user) == 0 ||
+	   !eregi("^([0-9a-z])+$", $get_user) ||
+	   !$database->usernameTaken($get_user)){
+	   die("Username not registered or specified!");
 	}
-	else{
 
-		if(!$req_user || strlen($req_user) == 0 ||
-		   !eregi("^([0-9a-z])+$", $req_user) ||
-		   !$database->usernameTaken($req_user)){
-		   die("Username not registered or specified!");
+	// $get_user = trim($_GET['user']);
+	// If user is admin, let him view this page (user info)
+	if($session->isAdmin() || ($session->username == $get_user)){
+
+		/**
+		 * User has submitted form without errors and user's
+		 * account has been edited successfully.
+		 */
+		if(isset($_SESSION['useredit'])){
+		   unset($_SESSION['useredit']);
+		   echo "<div style=\"color:green;\"><b>$get_user"."'s"."</b>,  account has been successfully updated.</div> "
+		       ."<br />See $get_user"."'s "."<a href=\"userinfo.php?user=$get_user\">profile page</a>.";
 		}
 
-		// $req_user = trim($_GET['user']);
-		// If user is admin, let him view this page (user info)
-		if($session->isAdmin() || ($session->username == trim($_GET['user']))){
+		/* Logged in user viewing own account */
+		if(strcmp($session->username,$get_user) == 0){
+		   echo "<h1>Edit my account:</h1>";
+		}
+		/* Admin viewing others account */
+		else{
+		   echo "<h1>User Account Edit : $get_user</h1>";;
+		}	
 
-			/* Logged in user viewing own account */
-			if(strcmp($session->username,$req_user) == 0){
-			   echo "<h1>Edit my account:</h1>";
-			}
-			/* Admin viewing others account */
-			else{
-			   echo "<h1>User Account Edit : $req_user</h1>";;
-			}	
+		/* Display requested user information */
+		$req_user_info = $database->getUserInfo($get_user);
 
-			/* Display requested user information */
-			$req_user_info = $database->getUserInfo($req_user);
-			
-			if($form->num_errors > 0){
-			   echo "<td><font size=\"2\" color=\"#ff0000\">".$form->num_errors." error(s) found</font></td>";
-			}
+		if($form->num_errors > 0){
+		   echo "<td><font size=\"2\" color=\"#ff0000\">".$form->num_errors." error(s) found</font></td><br />";
+		   echo "<td><font size=\"2\" color=\"#ff0000\">".$form->spec_error."</font></td>";
+		}
 ?>
+		<form action="<? echo 'process.php?user='.$get_user  ?>" method="POST" enctype="multipart/form-data">   
+		    <?php
+		      echo '<div style="float:left;" class="imgLow">';
+		      echo "<img src='".$function->getUserPic($get_user)."' alt='Profile picture' style='padding:5px;' width='85'   class='doubleborder'/></div>";         
+		      ?>
+		      <input style="margin-top:5px;" type="file" name="file" /><br />
+		      <input type="hidden" name="pupload" value="1">
+		      <input type="submit" name="upload" value="Upload"><br /><? echo $form->error("file"); ?></td>
+		</form>
+		<form style="clear:both;" action="process.php?user=<? echo $get_user  ?>" method="POST">
+			<table align="left" border="0" cellspacing="0" cellpadding="3">
+				<tr>
+				<td>Current Password:</td>
+				<td><input type="password" name="curpass" maxlength="30" value="<?echo $form->value("curpass"); ?>"></td>
+				<td><? echo $form->error("curpass"); ?></td>
+				</tr>
 
-			<form action="process.php?user=<? echo $req_user  ?>" method="POST">
-				<table align="left" border="0" cellspacing="0" cellpadding="3">
-					<tr>
-					<td>Current Password:</td>
-					<td><input type="password" name="curpass" maxlength="30" value="<?echo $form->value("curpass"); ?>"></td>
-					<td><? echo $form->error("curpass"); ?></td>
-					</tr>
+				<tr>
+				<td>New Password:</td>
+				<td><input type="password" name="newpass" maxlength="30" value="<? echo $form->value("newpass"); ?>"></td>
+				<td><? echo $form->error("newpass"); ?></td>
+				</tr>
+				
+				<tr>
+				<td>Email:</td>
+				<td><input type="text" name="email" maxlength="50" value="<?
+					if($form->value("email") == ""){
+					   echo $req_user_info['email'];
+					}else{
+					   echo $form->value("email");
+					}
+					?>">
+				</td>
+				<td><? echo $form->error("email"); ?></td>
+				</tr>
 
-					<tr>
-					<td>New Password:</td>
-					<td><input type="password" name="newpass" maxlength="30" value="<? echo $form->value("newpass"); ?>"></td>
-					<td><? echo $form->error("newpass"); ?></td>
-					</tr>
-					
-					<tr>
-					<td>Email:</td>
-					<td><input type="text" name="email" maxlength="50" value="<?
-						if($form->value("email") == ""){
-						   echo $req_user_info['email'];
-						}else{
-						   echo $form->value("email");
-						}
-						?>">
-					</td>
-					<td><? echo $form->error("email"); ?></td>
-					</tr>
-
-					<tr>
-					<td colspan="2" align="right">
-						<input type="hidden" name="subedit" value="1">
-						<input type="submit" value="Edit Account"></td>
-					</tr>
-					<tr>
-					<td colspan="2" align="left"></td>
-					</tr>
-				</table>
-			</form>
-			<a style="float:left; clear:both;" href="main.php">Back to Main</a>
+				<tr>
+				<td colspan="2" align="right">
+					<input type="hidden" name="subedit" value="1">
+					<input type="submit" value="Edit Account"></td>
+				</tr>
+				<tr>
+				<td colspan="2" align="left"></td>
+				</tr>
+			</table>
+		</form>
+		<a style="float:left; clear:both;" href="main.php">Back to Main</a>
 
 <?
-		}else{
-		   echo "You don't have permission to edit other users profiles!";
-		}
+	}else{
+	   // echo "You don't have permission to edit other users profiles!";
+	   header("Location: main.php");
 	}
 }
 else{

@@ -122,7 +122,40 @@ class MySQLDB
       $result = mysql_query($q, $this->db_connection);
       return (mysql_numrows($result) > 0);
    }
-   
+
+   /*
+    * emailInUse - Returns true if the email has
+    * been taken by another user, false otherwise.
+   */
+   function emailInUse($email){
+      if(!get_magic_quotes_gpc()){
+         $email = addslashes($email);
+      }
+      $q = "SELECT email FROM ".TBL_USERS." WHERE email = '$email'";
+      $result = mysql_query($q, $this->db_connection);
+      return (mysql_numrows($result) > 0);
+   }
+
+   /*
+    * checkUserPic - Returns result if the user has
+    * a picture already stored in the database, NULL otherwise
+   */
+   function checkUserPic($username){
+      if(!get_magic_quotes_gpc()){
+         $username = addslashes($username);
+      }
+      $q = "SELECT userpic FROM ".TBL_USERS." WHERE username = '$username'";
+      $result = mysql_query($q, $this->db_connection) or die(mysql_error());
+      $row = mysql_fetch_row($result);
+
+      if ($result == NULL) {
+        return NULL;
+      }
+      else{
+          return $row[0];
+      }
+   }
+
    /**
     * usernameBanned - Returns true if the username has
     * been banned by the administrator.
@@ -149,7 +182,7 @@ class MySQLDB
       }else{
          $ulevel = USER_LEVEL;
       }
-      $q = "INSERT INTO ".TBL_USERS." VALUES ('$username', '$password', '0', $ulevel, '$email', $time)";
+      $q = "INSERT INTO ".TBL_USERS." (username, password, userid, userlevel, email, timestamp) VALUES ('$username', '$password', '0', $ulevel, '$email', $time)";
       return mysql_query($q, $this->db_connection);
    }
    
