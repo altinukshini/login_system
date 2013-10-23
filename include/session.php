@@ -420,17 +420,12 @@ class Session
    // Edit users profile picture
    function editUserProfilePic($getuser, $userpic){
       global $database, $form;  //The database and form object
- 
       /* Update profile picture */
       if($database->updateUserField($getuser,"userpic",$userpic)){
-         return true;
+        return true;
       }else{
-        $field = "pupload";
         return false;
       }
-
-      /* Success! */
-      // return true;
    }
 
    /**

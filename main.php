@@ -11,8 +11,6 @@
  * Written by: Jpmaster77 a.k.a. The Grandmaster of C++ (GMC)
  * Last Updated: August 26, 2004
  */
-ini_set('display_errors',1); 
- error_reporting(E_ALL);
 include("include/session.php");
 ?>
 

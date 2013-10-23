@@ -12,9 +12,6 @@
  */
 include("include/session.php");
 
-ini_set('display_errors',1); 
- error_reporting(E_ALL);
-
 class Process
 {
    /* Class constructor */
@@ -186,7 +183,6 @@ class Process
       global $database, $session, $form, $function;
 
        /* Requested Username error checking */
-       // $req_user = trim($_GET['user']);
        if(!$function->getUser() || strlen($function->getUser()) == 0 ||
           !eregi("^([0-9a-z])+$", $function->getUser()) ||
           !$database->usernameTaken($function->getUser())){

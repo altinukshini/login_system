@@ -20,7 +20,6 @@ include("include/session.php");
 /* You need to be loged in to view this page */
 if($session->logged_in){
 		
-	// $req_user = trim($_GET['user']);
 	// If user is admin, let him view this page (user info)
 	if($session->isAdmin() || ($session->username == trim($_GET['user']))){
 
@@ -36,7 +35,7 @@ if($session->logged_in){
 		if(strcmp($session->username,$function->getUser()) == 0){
 		   echo "<h1>My Account</h1>";
 		}
-		/* Visitor not viewing own account */
+		/* Admin not viewing own account */
 		else{
 		   echo "<h1>User Info</h1>";
 		}
@@ -68,7 +67,6 @@ if($session->logged_in){
 		 */
 
 		/* If logged in user viewing own account, give link to edit */
-		// if(strcmp($session->username,$req_user) == 0){
 		if ($session->isAdmin() || ($session->username == $function->getUser())){
 		   echo "<br><a href=\"useredit.php?user=$req_user\">Edit Account Information</a><br>";
 		}
