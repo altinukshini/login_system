@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Admin.php
  *
@@ -96,9 +96,9 @@ else{
 <h1>Admin Center</h1>
 <font size="5" color="#ff0000">
 <b>::::::::::::::::::::::::::::::::::::::::::::</b></font>
-<font size="4">Logged in as <b><? echo $session->username; ?></b></font><br><br>
+<font size="4">Logged in as <b><?php echo $session->username; ?></b></font><br><br>
 Back to [<a href="../main.php">Main Page</a>]<br><br>
-<?
+<?php
 if($form->num_errors > 0){
    echo "<font size=\"4\" color=\"#ff0000\">"
        ."!*** Error with request, please fix</font><br><br>";
@@ -106,31 +106,31 @@ if($form->num_errors > 0){
 ?>
 <table align="left" border="0" cellspacing="5" cellpadding="5">
 <tr><td>
-<?
+<?php
 /**
  * Display Users Table
  */
 ?>
 <h3>Users Table Contents:</h3>
-<?
+<?php
 displayUsers();
 ?>
 </td></tr>
 <tr>
 <td>
 <br>
-<?
+<?php
 /**
  * Update User Level
  */
 ?>
 <h3>Update User Level</h3>
-<? echo $form->error("upduser"); ?>
+<?php echo $form->error("upduser"); ?>
 <table>
 <form action="adminprocess.php" method="POST">
 <tr><td>
 Username:<br>
-<input type="text" name="upduser" maxlength="30" value="<? echo $form->value("upduser"); ?>">
+<input type="text" name="upduser" maxlength="30" value="<?php echo $form->value("upduser"); ?>">
 </td>
 <td>
 Level:<br>
@@ -153,16 +153,16 @@ Level:<br>
 </tr>
 <tr>
 <td>
-<?
+<?php
 /**
  * Delete User
  */
 ?>
 <h3>Delete User</h3>
-<? echo $form->error("deluser"); ?>
+<?php echo $form->error("deluser"); ?>
 <form action="adminprocess.php" method="POST">
 Username:<br>
-<input type="text" name="deluser" maxlength="30" value="<? echo $form->value("deluser"); ?>">
+<input type="text" name="deluser" maxlength="30" value="<?php echo $form->value("deluser"); ?>">
 <input type="hidden" name="subdeluser" value="1">
 <input type="submit" value="Delete User">
 </form>
@@ -173,7 +173,7 @@ Username:<br>
 </tr>
 <tr>
 <td>
-<?
+<?php
 /**
  * Delete Inactive Users
  */
@@ -208,16 +208,16 @@ Days:<br>
 </tr>
 <tr>
 <td>
-<?
+<?php
 /**
  * Ban User
  */
 ?>
 <h3>Ban User</h3>
-<? echo $form->error("banuser"); ?>
+<?php echo $form->error("banuser"); ?>
 <form action="adminprocess.php" method="POST">
 Username:<br>
-<input type="text" name="banuser" maxlength="30" value="<? echo $form->value("banuser"); ?>">
+<input type="text" name="banuser" maxlength="30" value="<?php echo $form->value("banuser"); ?>">
 <input type="hidden" name="subbanuser" value="1">
 <input type="submit" value="Ban User">
 </form>
@@ -227,13 +227,13 @@ Username:<br>
 <td><hr></td>
 </tr>
 <tr><td>
-<?
+<?php
 /**
  * Display Banned Users Table
  */
 ?>
 <h3>Banned Users Table Contents:</h3>
-<?
+<?php
 displayBannedUsers();
 ?>
 </td></tr>
@@ -242,16 +242,16 @@ displayBannedUsers();
 </tr>
 <tr>
 <td>
-<?
+<?php
 /**
  * Delete Banned User
  */
 ?>
 <h3>Delete Banned User</h3>
-<? echo $form->error("delbanuser"); ?>
+<?php echo $form->error("delbanuser"); ?>
 <form action="adminprocess.php" method="POST">
 Username:<br>
-<input type="text" name="delbanuser" maxlength="30" value="<? echo $form->value("delbanuser"); ?>">
+<input type="text" name="delbanuser" maxlength="30" value="<?php echo $form->value("delbanuser"); ?>">
 <input type="hidden" name="subdelbanned" value="1">
 <input type="submit" value="Delete Banned User">
 </form>
@@ -262,7 +262,7 @@ Username:<br>
 
 <tr>
 <td>
-<?
+<?php
 /**
  * Add  User
  */
@@ -271,9 +271,9 @@ Username:<br>
 
 <form action="adminprocess.php" method="POST">
 <table align="left" border="0" cellspacing="0" cellpadding="3">
-<tr><td>Username:</td><td><input type="text" name="user" maxlength="30" value="<? echo $form->value("user"); ?>"></td><td><? echo $form->error("user"); ?></td></tr>
-<tr><td>Password:</td><td><input type="password" name="pass" maxlength="30" value="<? echo $form->value("pass"); ?>"></td><td><? echo $form->error("pass"); ?></td></tr>
-<tr><td>Email:</td><td><input type="text" name="email" maxlength="50" value="<? echo $form->value("email"); ?>"></td><td><? echo $form->error("email"); ?></td></tr>
+<tr><td>Username:</td><td><input type="text" name="user" maxlength="30" value="<?php echo $form->value("user"); ?>"></td><td><?php echo $form->error("user"); ?></td></tr>
+<tr><td>Password:</td><td><input type="password" name="pass" maxlength="30" value="<?php echo $form->value("pass"); ?>"></td><td><?php echo $form->error("pass"); ?></td></tr>
+<tr><td>Email:</td><td><input type="text" name="email" maxlength="50" value="<?php echo $form->value("email"); ?>"></td><td><?php echo $form->error("email"); ?></td></tr>
 <tr><td colspan="2" align="right">
 <input type="hidden" name="adduser" value="1">
 <input type="submit" value="Add!"></td></tr>
@@ -282,7 +282,7 @@ Username:<br>
 </td>
 </tr>
 <tr><td colspan="2" align="left"><a href="main.php">Back to Main</a></td></tr>
-<?
+<?php
 if($form->num_errors > 0){
    echo "<td><font size=\"2\" color=\"#ff0000\">".$form->num_errors." error(s) found</font></td>";
 }
@@ -292,7 +292,7 @@ if($form->num_errors > 0){
 </table>
 </body>
 </html>
-<?
+<?php
 }
 ?>
 

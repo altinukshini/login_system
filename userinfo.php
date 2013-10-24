@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * UserInfo.php
  *
@@ -15,7 +15,7 @@ include("include/session.php");
 <title>Jpmaster77's Login Script</title>
 <body>
 
-<?
+<?php
 
 /* You need to be loged in to view this page */
 if($session->logged_in){

@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Process.php
  * 
@@ -188,24 +188,19 @@ class Process
           !$database->usernameTaken($function->getUser())){
           die("Username not specified!");
       }
-
       /* Account edit attempt */
       $retval = $session->editAccount($function->getUser(), $_POST['curpass'], $_POST['newpass'], $_POST['email']);
 
       /* Account edit successful */
       if($retval){
          $_SESSION['useredit'] = true;
-         // header("Location: ".$session->referrer);
          header("Location: ".$session->referrer."?user=".$function->getUser());
-         // echo "Good";
       }
       /* Error found with form */
       else{
          $_SESSION['value_array'] = $_POST;
          $_SESSION['error_array'] = $form->getErrorArray();
-         // header("Location: ".$session->referrer);
          header("Location: ".$session->referrer."?user=".$function->getUser());
-         // echo "Bad";
       }
    }
 

@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * UserEdit.php
  *
@@ -17,7 +17,7 @@ include("include/session.php");
 <title>Jpmaster77's Login Script</title>
 <body>
 
-<?
+<?php
 
 /**
  * If user is not logged in, then do not display anything.
@@ -66,32 +66,32 @@ if($session->logged_in){
 		   echo "<td><font size=\"2\" color=\"#ff0000\">".$form->spec_error."</font></td>";
 		}
 ?>
-		<form action="<? echo 'process.php?user='.$get_user  ?>" method="POST" enctype="multipart/form-data">   
+		<form action="<?php echo 'process.php?user='.$get_user  ?>" method="POST" enctype="multipart/form-data">   
 		    <?php
 		      echo '<div style="float:left;" class="imgLow">';
 		      echo "<img src='".$function->getUserPic($get_user)."' alt='Profile picture' style='padding:5px;' width='85'   class='doubleborder'/></div>";         
 		      ?>
 		      <input style="margin-top:5px;" type="file" name="file" /><br />
 		      <input type="hidden" name="pupload" value="1">
-		      <input type="submit" name="upload" value="Upload"><br /><? echo $form->error("file"); ?></td>
+		      <input type="submit" name="upload" value="Upload"><br /><?php echo $form->error("file"); ?></td>
 		</form>
-		<form style="clear:both;" action="process.php?user=<? echo $get_user  ?>" method="POST">
+		<form style="clear:both;" action="process.php?user=<?php echo $get_user  ?>" method="POST">
 			<table align="left" border="0" cellspacing="0" cellpadding="3">
 				<tr>
 				<td>Current Password:</td>
-				<td><input type="password" name="curpass" maxlength="30" value="<?echo $form->value("curpass"); ?>"></td>
-				<td><? echo $form->error("curpass"); ?></td>
+				<td><input type="password" name="curpass" maxlength="30" value="<?php echo $form->value("curpass"); ?>"></td>
+				<td><?php echo $form->error("curpass"); ?></td>
 				</tr>
 
 				<tr>
 				<td>New Password:</td>
-				<td><input type="password" name="newpass" maxlength="30" value="<? echo $form->value("newpass"); ?>"></td>
-				<td><? echo $form->error("newpass"); ?></td>
+				<td><input type="password" name="newpass" maxlength="30" value="<?php echo $form->value("newpass"); ?>"></td>
+				<td><?php echo $form->error("newpass"); ?></td>
 				</tr>
 				
 				<tr>
 				<td>Email:</td>
-				<td><input type="text" name="email" maxlength="50" value="<?
+				<td><input type="text" name="email" maxlength="50" value="<?php
 					if($form->value("email") == ""){
 					   echo $req_user_info['email'];
 					}else{
@@ -99,7 +99,7 @@ if($session->logged_in){
 					}
 					?>">
 				</td>
-				<td><? echo $form->error("email"); ?></td>
+				<td><?php echo $form->error("email"); ?></td>
 				</tr>
 
 				<tr>
@@ -114,7 +114,7 @@ if($session->logged_in){
 		</form>
 		<a style="float:left; clear:both;" href="main.php">Back to Main</a>
 
-<?
+<?php
 	}else{
 	   // echo "You don't have permission to edit other users profiles!";
 	   header("Location: main.php");
