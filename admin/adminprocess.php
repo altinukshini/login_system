@@ -6,7 +6,7 @@
  * admin submitted forms from the admin center, these deal with
  * member system adjustments.
  *
- * Written by: Jpmaster77 a.k.a. The Grandmaster of C++ (GMC)
+ * Written by: 
  * Last Updated: August 15, 2004
  */
 include("../include/session.php");

@@ -12,7 +12,7 @@
 #  you can just include the path to dbtables.sql and that's
 #  fine too.
 #
-#  Written by: Jpmaster77 a.k.a. The Grandmaster of C++ (GMC)
+#  Written by: 
 #  Last Updated: August 13, 2004
 #
 

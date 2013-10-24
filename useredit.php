@@ -7,14 +7,14 @@
  * usernames can not be edited. When changing their
  * password, they must first confirm their current password.
  *
- * Written by: Jpmaster77 a.k.a. The Grandmaster of C++ (GMC)
- * Last Updated: August 26, 2004
+ * Written by: 
+ * Last Updated: 
  */
 include("include/session.php");
 ?>
 
 <html>
-<title>Jpmaster77's Login Script</title>
+<title>Employee management system</title>
 <body>
 
 <?php

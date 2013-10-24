@@ -13,14 +13,14 @@
  * would be better to not even link to this page from
  * your website.
  *
- * Written by: Jpmaster77 a.k.a. The Grandmaster of C++ (GMC)
- * Last Updated: August 26, 2004
+ * Written by: 
+ * Last Updated: 
  */
 include("include/session.php");
 ?>
 
 <html>
-<title>Jpmaster77's Login Script</title>
+<title>Employee management system</title>
 <body>
 
 <?php

@@ -6,7 +6,7 @@
  * or lets the user know, if he's already logged in, that he
  * can't register another name.
  *
- * Written by: Jpmaster77 a.k.a. The Grandmaster of C++ (GMC)
+ * Written by: 
  * Last Updated: August 19, 2004
  */
 include("include/session.php");

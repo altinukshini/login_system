@@ -7,7 +7,7 @@
  * pages if errors are found, or if form is successful, either
  * way. Also handles the logout procedure.
  *
- * Written by: Jpmaster77 a.k.a. The Grandmaster of C++ (GMC)
+ * Written by: 
  * Last Updated: August 19, 2004
  */
 include("include/session.php");

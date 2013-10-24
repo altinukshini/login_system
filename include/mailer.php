@@ -10,7 +10,7 @@
  * out this website to see a list of freeware programs:
  * <http://www.snapfiles.com/freeware/server/fwmailserver.html>
  *
- * Written by: Jpmaster77 a.k.a. The Grandmaster of C++ (GMC)
+ * Written by: 
  * Last Updated: August 19, 2004
  */
  
@@ -23,9 +23,9 @@ class Mailer
     */
    function sendWelcome($user, $email, $pass){
       $from = "From: ".EMAIL_FROM_NAME." <".EMAIL_FROM_ADDR.">";
-      $subject = "Jpmaster77's Site - Welcome!";
+      $subject = "Employee Management System Site - Welcome!";
       $body = $user.",\n\n"
-             ."Welcome! You've just registered at Jpmaster77's Site "
+             ."Welcome! You've just registered at Employee Management System Site "
              ."with the following information:\n\n"
              ."Username: ".$user."\n"
              ."Password: ".$pass."\n\n"
@@ -34,7 +34,7 @@ class Mailer
              ."email address, if you would like to change your "
              ."email address you can do so by going to the "
              ."My Account page after signing in.\n\n"
-             ."- Jpmaster77's Site";
+             ."- Employee Management System Site";
 
       return mail($email,$subject,$body,$from);
    }
@@ -46,18 +46,18 @@ class Mailer
     */
    function sendNewPass($user, $email, $pass){
       $from = "From: ".EMAIL_FROM_NAME." <".EMAIL_FROM_ADDR.">";
-      $subject = "Jpmaster77's Site - Your new password";
+      $subject = "Employee Management System Site - Your new password";
       $body = $user.",\n\n"
              ."We've generated a new password for you at your "
              ."request, you can use this new password with your "
-             ."username to log in to Jpmaster77's Site.\n\n"
+             ."username to log in to Employee Management System Site.\n\n"
              ."Username: ".$user."\n"
              ."New Password: ".$pass."\n\n"
              ."It is recommended that you change your password "
              ."to something that is easier to remember, which "
              ."can be done by going to the My Account page "
              ."after signing in.\n\n"
-             ."- Jpmaster77's Site";
+             ."- Employee Management System Site";
              
       return mail($email,$subject,$body,$from);
    }

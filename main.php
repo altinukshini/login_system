@@ -8,14 +8,14 @@
  * but re-appear on subsequent pages, depending on whether
  * the user has logged in or not.
  *
- * Written by: Jpmaster77 a.k.a. The Grandmaster of C++ (GMC)
- * Last Updated: August 26, 2004
+ * Written by: 
+ * Last Updated: 
  */
 include("include/session.php");
 ?>
 
 <html>
-<title>Jpmaster77's Login Script</title>
+<title>Employee management system</title>
 <body>
 
 <table>

@@ -8,8 +8,8 @@
  * choose to delete specific users, delete inactive users,
  * ban users, update user levels, etc.
  *
- * Written by: Jpmaster77 a.k.a. The Grandmaster of C++ (GMC)
- * Last Updated: August 26, 2004
+ * Written by: 
+ * Last Updated: 
  */
 include("../include/session.php");
 
@@ -91,7 +91,7 @@ else{
  */
 ?>
 <html>
-<title>Jpmaster77's Login Script</title>
+<title>Employee management system</title>
 <body>
 <h1>Admin Center</h1>
 <font size="5" color="#ff0000">

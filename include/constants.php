@@ -6,7 +6,7 @@
  * make it easier for the site administrator to tweak
  * the login script.
  *
- * Written by: Jpmaster77 a.k.a. The Grandmaster of C++ (GMC)
+ * Written by: 
  * Last Updated: August 19, 2004
  */
  
